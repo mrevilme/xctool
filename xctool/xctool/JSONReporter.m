@@ -23,24 +23,23 @@
 - (void)beginBuildCommand:(NSDictionary *)event { [self passThrough:event]; }
 - (void)endBuildCommand:(NSDictionary *)event { [self passThrough:event]; }
 
-- (void)beginXcodebuild:(NSDictionary *)event {
-    self.events = [NSMutableArray arrayWithCapacity:100];
-    [self passThrough:event];
+- (void)beginXcodebuild:(NSDictionary *)event { [self passThrough:event]; }
+- (void)endXcodebuild:(NSDictionary *)event { [self passThrough:event]; }
+
+- (void)beginRun:(NSDictionary *)event {
+  self.events = [NSMutableArray arrayWithCapacity:100];
 }
-- (void)endXcodebuild:(NSDictionary *)event {
-    
-    [self passThrough:event];
-    
-    NSError *error = nil;
-    NSData *eventData = [NSJSONSerialization dataWithJSONObject:[self rootObject]
-                                                        options:0
-                                                          error:&error];
-    NSAssert(eventData != nil,
-             @"Failed to encode event with error: %@ for event: %@",
-             [error localizedFailureReason], [self rootObject]);
-    
-    [self.outputHandle writeData:eventData];
-    [self.outputHandle writeData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+- (void)endRun:(NSDictionary *)event {
+  NSError *error = nil;
+  NSData *eventData = [NSJSONSerialization dataWithJSONObject:[self rootObject]
+                                                      options:0
+                                                        error:&error];
+  NSAssert(eventData != nil,
+           @"Failed to encode event with error: %@ for event: %@",
+           [error localizedFailureReason], [self rootObject]);
+  
+  [self.outputHandle writeData:eventData];
+  [self.outputHandle writeData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
 - (id) rootObject {

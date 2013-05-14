@@ -20,24 +20,19 @@ static NSString *kBuildExtractorEventsKey = @"events";
     NSString *title = [event objectForKey:kReporter_EndBuildCommand_TitleKey];
     BOOL success = [[event objectForKey:kReporter_EndBuildCommand_SucceededKey] boolValue];
     if ( [title hasPrefix:@"CodeSign"] && success) {
-        NSMutableString *output = [[event objectForKey:kReporter_EndBuildCommand_EmittedOutputTextKey] mutableCopy];
-        [output replaceOccurrencesOfString:@"CodeSign "
-                                withString:@""
-                                   options:NSLiteralSearch
-                                     range:NSMakeRange(0, [output length])];
-        [output replaceOccurrencesOfString:@"\""
-                                withString:@""
-                                   options:NSLiteralSearch
-                                     range:NSMakeRange(0, [output length])];
-        
-        [output replaceOccurrencesOfString:@": replacing existing signature"
-                                withString:@""
-                                   options:NSLiteralSearch
-                                     range:NSMakeRange(0, [output length])];
-        
-        if ( [output length] > 0 ) {
-            [self.build setObject:output forKey:kBuildExtractorAppKey];
-        }
+      NSMutableString *output = [title mutableCopy];
+      [output replaceOccurrencesOfString:@"CodeSign "
+                              withString:@""
+                                 options:NSLiteralSearch
+                                   range:NSMakeRange(0, [output length])];
+      
+      [output replaceOccurrencesOfString:@"\""
+                              withString:@""
+                                 options:NSLiteralSearch
+                                   range:NSMakeRange(0, [output length])];
+      if ( [output length] > 0 ) {
+          [self.build setObject:output forKey:kBuildExtractorAppKey];
+      }
     }
     
     if ( [title hasPrefix:@"Generate"] && [title hasSuffix:@".dSYM"] && success ) {
