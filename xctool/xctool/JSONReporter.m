@@ -10,10 +10,9 @@
 
 @implementation JSONReporter
 - (void)passThrough:(NSDictionary *)event {
-    @synchronized(self.root) {
-        [self.root addObject:event];
+    @synchronized(self.events) {
+        [self.events addObject:event];
     }
-
 }
 
 
@@ -25,7 +24,7 @@
 - (void)endBuildCommand:(NSDictionary *)event { [self passThrough:event]; }
 
 - (void)beginXcodebuild:(NSDictionary *)event {
-    self.root = [NSMutableArray arrayWithCapacity:100];
+    self.events = [NSMutableArray arrayWithCapacity:100];
     [self passThrough:event];
 }
 - (void)endXcodebuild:(NSDictionary *)event {
@@ -33,15 +32,19 @@
     [self passThrough:event];
     
     NSError *error = nil;
-    NSData *eventData = [NSJSONSerialization dataWithJSONObject:[self root]
+    NSData *eventData = [NSJSONSerialization dataWithJSONObject:[self rootObject]
                                                         options:0
                                                           error:&error];
     NSAssert(eventData != nil,
              @"Failed to encode event with error: %@ for event: %@",
-             [error localizedFailureReason], [self root]);
+             [error localizedFailureReason], [self rootObject]);
     
     [self.outputHandle writeData:eventData];
     [self.outputHandle writeData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
+}
+
+- (id) rootObject {
+    return self.events;
 }
 
 - (void)beginOcunit:(NSDictionary *)event { [self passThrough:event]; }
