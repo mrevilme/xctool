@@ -85,11 +85,18 @@
 		32707EE21725FE7F00AF2F53 /* TestActionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32707EE11725FE7F00AF2F53 /* TestActionTests.m */; };
 		32A90C541725F05800C2349E /* TestAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A90C521725F05800C2349E /* TestAction.m */; };
 		32A90C551725F05800C2349E /* TestAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A90C521725F05800C2349E /* TestAction.m */; };
-		C9D5B9891733CC2100011C1F /* ArchiveAction.m in Sources */ = {isa = PBXBuildFile; fileRef = C9D5B9881733CC2100011C1F /* ArchiveAction.m */; };
-		C9D5B98A1733CC2500011C1F /* ArchiveAction.m in Sources */ = {isa = PBXBuildFile; fileRef = C9D5B9881733CC2100011C1F /* ArchiveAction.m */; };
 		37520901173311B500AC05F9 /* JUnitReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 37520900173311B500AC05F9 /* JUnitReporter.m */; };
 		37520902173311BC00AC05F9 /* JUnitReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 37520900173311B500AC05F9 /* JUnitReporter.m */; };
 		37520905173401D100AC05F9 /* JUnitReporterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37520904173401D100AC05F9 /* JUnitReporterTests.m */; };
+		722816CE1742240300DFAAB4 /* RedisPubReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 722816CD1742240300DFAAB4 /* RedisPubReporter.m */; };
+		722816FE174234A800DFAAB4 /* async.c in Sources */ = {isa = PBXBuildFile; fileRef = 722816F0174234A800DFAAB4 /* async.c */; };
+		722816FF174234A800DFAAB4 /* dict.c in Sources */ = {isa = PBXBuildFile; fileRef = 722816F2174234A800DFAAB4 /* dict.c */; };
+		72281700174234A800DFAAB4 /* hiredis.c in Sources */ = {isa = PBXBuildFile; fileRef = 722816F5174234A800DFAAB4 /* hiredis.c */; };
+		72281701174234A800DFAAB4 /* net.c in Sources */ = {isa = PBXBuildFile; fileRef = 722816F7174234A800DFAAB4 /* net.c */; };
+		72281702174234A800DFAAB4 /* ObjCHiredis.m in Sources */ = {isa = PBXBuildFile; fileRef = 722816FA174234A800DFAAB4 /* ObjCHiredis.m */; };
+		72281703174234A800DFAAB4 /* sds.c in Sources */ = {isa = PBXBuildFile; fileRef = 722816FB174234A800DFAAB4 /* sds.c */; };
+		C9D5B9891733CC2100011C1F /* ArchiveAction.m in Sources */ = {isa = PBXBuildFile; fileRef = C9D5B9881733CC2100011C1F /* ArchiveAction.m */; };
+		C9D5B98A1733CC2500011C1F /* ArchiveAction.m in Sources */ = {isa = PBXBuildFile; fileRef = C9D5B9881733CC2100011C1F /* ArchiveAction.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -204,11 +211,27 @@
 		32707EE31725FE9500AF2F53 /* TestActionInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestActionInternal.h; sourceTree = "<group>"; };
 		32A90C521725F05800C2349E /* TestAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAction.m; sourceTree = "<group>"; };
 		32A90C531725F05800C2349E /* TestAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestAction.h; sourceTree = "<group>"; };
-		C9D5B9871733CC2100011C1F /* ArchiveAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArchiveAction.h; sourceTree = "<group>"; };
-		C9D5B9881733CC2100011C1F /* ArchiveAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArchiveAction.m; sourceTree = "<group>"; };
 		375208FF173311B500AC05F9 /* JUnitReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JUnitReporter.h; sourceTree = "<group>"; };
 		37520900173311B500AC05F9 /* JUnitReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JUnitReporter.m; sourceTree = "<group>"; };
 		37520904173401D100AC05F9 /* JUnitReporterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JUnitReporterTests.m; sourceTree = "<group>"; };
+		722816CC1742240300DFAAB4 /* RedisPubReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedisPubReporter.h; sourceTree = "<group>"; };
+		722816CD1742240300DFAAB4 /* RedisPubReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RedisPubReporter.m; sourceTree = "<group>"; };
+		722816F0174234A800DFAAB4 /* async.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = async.c; sourceTree = "<group>"; };
+		722816F1174234A800DFAAB4 /* async.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = async.h; sourceTree = "<group>"; };
+		722816F2174234A800DFAAB4 /* dict.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dict.c; sourceTree = "<group>"; };
+		722816F3174234A800DFAAB4 /* dict.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dict.h; sourceTree = "<group>"; };
+		722816F4174234A800DFAAB4 /* fmacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fmacros.h; sourceTree = "<group>"; };
+		722816F5174234A800DFAAB4 /* hiredis.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hiredis.c; sourceTree = "<group>"; };
+		722816F6174234A800DFAAB4 /* hiredis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hiredis.h; sourceTree = "<group>"; };
+		722816F7174234A800DFAAB4 /* net.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = net.c; sourceTree = "<group>"; };
+		722816F8174234A800DFAAB4 /* net.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = net.h; sourceTree = "<group>"; };
+		722816F9174234A800DFAAB4 /* ObjCHiredis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCHiredis.h; sourceTree = "<group>"; };
+		722816FA174234A800DFAAB4 /* ObjCHiredis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjCHiredis.m; sourceTree = "<group>"; };
+		722816FB174234A800DFAAB4 /* sds.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sds.c; sourceTree = "<group>"; };
+		722816FC174234A800DFAAB4 /* sds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sds.h; sourceTree = "<group>"; };
+		722816FD174234A800DFAAB4 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
+		C9D5B9871733CC2100011C1F /* ArchiveAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArchiveAction.h; sourceTree = "<group>"; };
+		C9D5B9881733CC2100011C1F /* ArchiveAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArchiveAction.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -263,6 +286,7 @@
 		283CCA3916C2EA3700F2E343 = {
 			isa = PBXGroup;
 			children = (
+				722816EE1742348C00DFAAB4 /* vendor */,
 				28E9B9DD16C3278D00A52E4D /* iPhoneSimulatorRemoteClient */,
 				28E9B98316C2F2D900A52E4D /* xctool.xcconfig */,
 				283CCA4716C2EA3800F2E343 /* xctool */,
@@ -411,8 +435,40 @@
 				283EAF581704C22000CE0A0C /* PhabricatorReporter.m */,
 				375208FF173311B500AC05F9 /* JUnitReporter.h */,
 				37520900173311B500AC05F9 /* JUnitReporter.m */,
+				722816CC1742240300DFAAB4 /* RedisPubReporter.h */,
+				722816CD1742240300DFAAB4 /* RedisPubReporter.m */,
 			);
 			name = Reporters;
+			sourceTree = "<group>";
+		};
+		722816EE1742348C00DFAAB4 /* vendor */ = {
+			isa = PBXGroup;
+			children = (
+				722816EF174234A800DFAAB4 /* ObjcHiredis */,
+			);
+			name = vendor;
+			sourceTree = "<group>";
+		};
+		722816EF174234A800DFAAB4 /* ObjcHiredis */ = {
+			isa = PBXGroup;
+			children = (
+				722816F0174234A800DFAAB4 /* async.c */,
+				722816F1174234A800DFAAB4 /* async.h */,
+				722816F2174234A800DFAAB4 /* dict.c */,
+				722816F3174234A800DFAAB4 /* dict.h */,
+				722816F4174234A800DFAAB4 /* fmacros.h */,
+				722816F5174234A800DFAAB4 /* hiredis.c */,
+				722816F6174234A800DFAAB4 /* hiredis.h */,
+				722816F7174234A800DFAAB4 /* net.c */,
+				722816F8174234A800DFAAB4 /* net.h */,
+				722816F9174234A800DFAAB4 /* ObjCHiredis.h */,
+				722816FA174234A800DFAAB4 /* ObjCHiredis.m */,
+				722816FB174234A800DFAAB4 /* sds.c */,
+				722816FC174234A800DFAAB4 /* sds.h */,
+				722816FD174234A800DFAAB4 /* util.h */,
+			);
+			name = ObjcHiredis;
+			path = vendor/ObjcHiredis;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -543,6 +599,13 @@
 				2864A3FA1734E52800BBF3B1 /* Version.m in Sources */,
 				C9D5B9891733CC2100011C1F /* ArchiveAction.m in Sources */,
 				37520901173311B500AC05F9 /* JUnitReporter.m in Sources */,
+				722816CE1742240300DFAAB4 /* RedisPubReporter.m in Sources */,
+				722816FE174234A800DFAAB4 /* async.c in Sources */,
+				722816FF174234A800DFAAB4 /* dict.c in Sources */,
+				72281700174234A800DFAAB4 /* hiredis.c in Sources */,
+				72281701174234A800DFAAB4 /* net.c in Sources */,
+				72281702174234A800DFAAB4 /* ObjCHiredis.m in Sources */,
+				72281703174234A800DFAAB4 /* sds.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -614,7 +677,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 28E9B98316C2F2D900A52E4D /* xctool.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -637,6 +700,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -646,7 +710,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 28E9B98316C2F2D900A52E4D /* xctool.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -663,6 +727,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -670,6 +735,10 @@
 		283CCA5116C2EA3800F2E343 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "xctool/xctool-Prefix.pch";
 				PRODUCT_NAME = xctool;
@@ -679,6 +748,10 @@
 		283CCA5216C2EA3800F2E343 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "xctool/xctool-Prefix.pch";
 				PRODUCT_NAME = xctool;
