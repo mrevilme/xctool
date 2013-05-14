@@ -20,6 +20,7 @@
 
 #import "Options.h"
 #import "JSONStreamReporter.h"
+#import "JUnitReporter.h"
 #import "PhabricatorReporter.h"
 #import "TextReporter.h"
 
@@ -77,6 +78,7 @@ void ReportMessage(ReporterMessageLevel level, NSString *format, ...) {
 + (Reporter *)reporterWithName:(NSString *)name outputPath:(NSString *)outputPath options:(Options *)options
 {
   NSDictionary *reporters = @{@"json-stream": [JSONStreamReporter class],
+                              @"junit": [JUnitReporter class],
                               @"pretty": [PrettyTextReporter class],
                               @"plain": [PlainTextReporter class],
                               @"phabricator": [PhabricatorReporter class],
@@ -111,7 +113,23 @@ void ReportMessage(ReporterMessageLevel level, NSString *format, ...) {
     _outputHandle = [standardOutput retain];
     return YES;
   } else {
-    if (![[NSFileManager defaultManager] createFileAtPath:self.outputPath contents:nil attributes:nil]) {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+      
+    NSString *basePath = [self.outputPath stringByDeletingLastPathComponent];
+
+    if ([basePath length] > 0) {
+      BOOL isDirectory;
+      BOOL exists = [fileManager fileExistsAtPath:basePath isDirectory:&isDirectory];
+      if (!exists) {
+        if (![fileManager createDirectoryAtPath:basePath withIntermediateDirectories:YES attributes:nil error:nil]) {
+          *error = [NSString stringWithFormat:@"Failed to create folder at '%@'.", basePath];
+          return NO;
+        }
+        exists = isDirectory = YES;
+      }
+    }
+    
+    if (![fileManager createFileAtPath:self.outputPath contents:nil attributes:nil]) {
       *error = [NSString stringWithFormat:@"Failed to create file at '%@'.", self.outputPath];
       return NO;
     }

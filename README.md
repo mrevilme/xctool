@@ -8,7 +8,7 @@ for continuous integration.
 [ [Features](#features) &bull; [Requirements](#requirements) &bull; [Usage](#usage)
 &bull; [Reporters](#reporters) &bull;
 [Configuration](#configuration-xctool-args) &bull; 
-[Contributing](#contributing) &bull; [License](#license) ]
+[Contributing](#contributing) &bull; [Known Issues](#known-issues) &bull; [License](#license) ]
 
 ## Features
 
@@ -262,18 +262,50 @@ over those in the _.xctool-args_ file.
 
 Bug fixes, improvements, and especially new
 [Reporter](https://github.com/facebook/xctool/blob/master/xctool/xctool/Reporter.h)
-implementations are welcome. 
-
-Before submitting a [pull
+implementations are welcome.  Before submitting a [pull
 request](https://help.github.com/articles/using-pull-requests), please
 be sure to sign the [Facebook
 Contributor License
 Agreement](https://developers.facebook.com/opensource/cla).  We can't
 accept pull requests unless it's been signed.
 
-Be sure to make your changes on a feature branch rather than master.
-And, submit a separate pull request for each self-contained
-change.
+#### Workflow 
+
+1. Fork.
+2. Make a feature branch: __git checkout -b my-feature__
+3. Make your feature.  Keep things tidy so you have one commit per self
+   contained change (squashing can help).
+3. Push your branch to your fork: __git push -u origin my-feature__
+4. Open GitHub, under "Your recently pushed branches", click __Pull
+   Request__ for _my-feature_.
+
+Be sure to use a separate feature branch and pull request for every
+self-contained feature.  If you need to make changes from feedback, make
+the changes in place rather than layering on commits (use interactive
+rebase to edit your earlier commits).  Then use __git push --force
+origin my-feature__ to update your pull request.
+
+#### Workflow (for Facebook people, other committers)
+
+Mostly the same, but use branches in the main xctool repo if you prefer.
+It's a nice way to keep things together.
+
+1. Make a feature branch: __git checkout -b myusername/my-feature__
+2. Push your branch: __git push -u origin myusername/my-feature__
+3. Open GitHub to [facebook/xctool](https://github.com/facebook/xctool),
+   under "Your recently pushed branches", click __Pull Request__ for
+   _myusername/my-feature_.
+
+## Known Issues
+
+* **_Find Implicit Dependencies_ is not supported.**  If you get unexplained
+linker or compile errors in xctool but not in Xcode, it might be this.
+Xcode.app has a mode where it will try to infer dependencies between
+your projects and make sure dependent projects are built first.
+Unfortunately it looks like this logic only exists in Xcode.app.  The
+workaround is to setup correct _Target Dependencies_ or to add the
+necessary targets to your scheme ahead of the targets that require them.
+More info in [issue #16](https://github.com/facebook/xctool/issues/16#issuecomment-17444311).
 
 ## License
 
