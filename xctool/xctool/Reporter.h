@@ -16,8 +16,6 @@
 
 #import <Foundation/Foundation.h>
 
-#define kReporter_Events_BeginRun @"begin-run"
-#define kReporter_Events_EndRun @"end-run"
 #define kReporter_Events_BeginAction @"begin-action"
 #define kReporter_Events_EndAction @"end-action"
 #define kReporter_Events_BeginOCUnit @"begin-ocunit"
@@ -105,8 +103,6 @@
 #define kReporter_Message_TimestampKey @"timestamp"
 #define kReporter_Message_LevelKey @"level"
 
-#define kReporter_BeginRun_ActionsKey @"actions"
-
 @class Action;
 @class Options;
 
@@ -162,8 +158,6 @@ void ReportMessage(ReporterMessageLevel level, NSString *format, ...) NS_FORMAT_
 - (void)endTest:(NSDictionary *)event;
 - (void)testOutput:(NSDictionary *)event;
 - (void)message:(NSDictionary *)event;
-- (void)beginRun:(NSDictionary *)event;
-- (void)endRun:(NSDictionary *)event;
 
 /**
  To be called before any action is run.

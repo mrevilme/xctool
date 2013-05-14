@@ -177,22 +177,12 @@
       _exitStatus = 1;
       return;
     }
-    
-    NSMutableArray *actions = [NSMutableArray arrayWithCapacity:[options.actions count]];
-    for (Action *action in options.actions) {
-      [actions addObject:[[action class] name]];
-    }
 
-    [options.reporters makeObjectsPerformSelector:@selector(handleEvent:)
-                                       withObject:@{
-     @"event": kReporter_Events_BeginRun, kReporter_BeginRun_ActionsKey: actions,
-     }];
-    
     for (Action *action in options.actions) {
       CFTimeInterval startTime = CACurrentMediaTime();
       [options.reporters makeObjectsPerformSelector:@selector(handleEvent:)
                                          withObject:@{
-       @"event": kReporter_Events_BeginRun,
+       @"event": kReporter_Events_BeginAction,
        kReporter_BeginAction_NameKey: [[action class] name],
        }];
 
@@ -213,9 +203,6 @@
         break;
       }
     }
-    
-    [options.reporters makeObjectsPerformSelector:@selector(handleEvent:)
-                                       withObject:@{ @"event": kReporter_Events_EndRun }];
   } @finally {
     [options.reporters makeObjectsPerformSelector:@selector(close)];
 
