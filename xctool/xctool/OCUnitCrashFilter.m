@@ -89,7 +89,9 @@
     [self.currentTestSuiteEventTimestampStack removeLastObject];
     [self.currentTestSuiteEventTestCountStack removeLastObject];
   } else if ([eventName isEqualToString:kReporter_Events_TestOuput]) {
-    NSAssert(self.currentTestEvent != nil, @"'test-output' event should only come during a test.");
+    NSAssert(_currentTestEvent != nil,
+             @"'test-output' event should only come during a test: %@",
+             event);
     [self.currentTestOutput appendString:event[kReporter_TestOutput_OutputKey]];
   }
 }
@@ -116,6 +118,8 @@
     [reporters makeObjectsPerformSelector:@selector(handleEvent:) withObject:@{
      @"event" : kReporter_Events_EndTest,
      kReporter_EndTest_TestKey : self.currentTestEvent[kReporter_EndTest_TestKey],
+     kReporter_EndTest_ClassNameKey : self.currentTestEvent[kReporter_EndTest_ClassNameKey],
+     kReporter_EndTest_MethodNameKey : self.currentTestEvent[kReporter_EndTest_MethodNameKey],
      kReporter_EndTest_SucceededKey : @NO,
      kReporter_EndTest_TotalDurationKey : @(CACurrentMediaTime() - self.currentTestEventTimestamp),
      kReporter_EndTest_OutputKey : [self.currentTestOutput stringByAppendingString:concatenatedCrashReports],
@@ -127,6 +131,9 @@
 
     // To surface this to the Reporter, we create a fictional test.
     NSString *testName = [NSString stringWithFormat:@"%@_CRASHED", fullProductName];
+    NSString *className = fullProductName;
+    NSString *methodName = @"CRASHED";
+
     NSString *output =
       [NSString stringWithFormat:
        @"The tests crashed immediately after running '%@'.  Even though that test finished, it's "
@@ -143,6 +150,8 @@
     [reporters makeObjectsPerformSelector:@selector(handleEvent:) withObject:@{
      @"event" : kReporter_Events_BeginTest,
      kReporter_BeginTest_TestKey : testName,
+     kReporter_BeginTest_ClassNameKey : className,
+     kReporter_BeginTest_MethodNameKey : methodName,
      }];
     [reporters makeObjectsPerformSelector:@selector(handleEvent:) withObject:@{
      @"event" : kReporter_Events_TestOuput,
@@ -151,6 +160,8 @@
     [reporters makeObjectsPerformSelector:@selector(handleEvent:) withObject:@{
      @"event" : kReporter_Events_EndTest,
      kReporter_EndTest_TestKey : testName,
+     kReporter_EndTest_ClassNameKey : className,
+     kReporter_EndTest_MethodNameKey : methodName,
      kReporter_EndTest_SucceededKey : @NO,
      kReporter_EndTest_TotalDurationKey : @(0),
      kReporter_EndTest_OutputKey : output,

@@ -42,6 +42,15 @@
 
 + (NSArray *)options
 {
+  NSMutableString *reporters = [NSMutableString string];
+  for (NSString *reporterName in [Reporter availableReporters]) {
+    [reporters appendFormat:@"%@,", reporterName];
+  }
+  if ( [reporters length] > 0 ) {
+    [reporters deleteCharactersInRange:NSMakeRange([reporters length]-1, 1)];
+  }
+  
+  
   return
   @[[Action actionOptionWithName:@"help"
                          aliases:@[@"h", @"usage"]
@@ -109,7 +118,7 @@
                            mapTo:@selector(setXcconfig:)],
     [Action actionOptionWithName:@"reporter"
                          aliases:nil
-                     description:@"add reporter"
+                     description:[NSString stringWithFormat:@"add reporter (%@)", reporters]
                        paramName:@"TYPE[:FILE]"
                            mapTo:@selector(addReporter:)],
     [Action actionOptionWithName:@"showBuildSettings"
@@ -202,21 +211,48 @@
   for (NSString *reporterOption in _reporterOptions) {
     NSArray *optionParts = [reporterOption componentsSeparatedByString:@":"];
     NSString *name = optionParts[0];
-    NSString *outputFile = (optionParts.count > 1) ? optionParts[1] : @"-";
+    // Default is stdout
+    NSString *outputFile = @"-";
+
+    // Prepare the options dictionary
+    NSMutableDictionary *options = [NSMutableDictionary dictionaryWithCapacity:[optionParts count]-1];
+    // Iterate over all arguments except the first which denotes which reporter
+    for (NSString *argument in [optionParts subarrayWithRange:NSMakeRange(1, [optionParts count]-1)]) {
+      NSArray *argumentParts = [argument componentsSeparatedByString:@"="];
+      if ( [argumentParts count] > 0 ) {
+        NSString *key = [argumentParts objectAtIndex:0];
+        NSString *value = nil;
+        
+        // If the argument is file its treated different.
+        if ( [key isEqualToString:@"file"] ) {
+          outputFile = value;
+        } else {
+          // If we get arg,arg2=asdf then we treat arg as a bool and just send on a empty string as the value
+          if ( [argumentParts count] == 1 ) {
+            value = @"";
+          } else {
+            value = [argumentParts objectAtIndex:1];
+          }
+          
+          // We dont want empty keys
+          if ( [key length] > 0 ) {
+            [options setValue:value forKey:key];
+          }
+        }
+      }
+    }
+    
 
     Reporter *reporter = [Reporter reporterWithName:name outputPath:outputFile options:self];
-      
+
     if (reporter == nil) {
       *errorMessage = [NSString stringWithFormat:@"No reporter with name '%@' found.", name];
       return NO;
     }
+
       
     if ( [reporter respondsToSelector:@selector(setReporterOptions:)] ) {
-        NSArray *arrayWithoutNameOrPath = [NSArray array];
-        if ([optionParts count] > 2) {
-             arrayWithoutNameOrPath = [optionParts subarrayWithRange:NSMakeRange(2, [optionParts count]-2)];
-        }
-        [reporter performSelector:@selector(setReporterOptions:) withObject:arrayWithoutNameOrPath];
+      [reporter performSelector:@selector(setReporterOptions:) withObject:options];
     }
 
     [self.reporters addObject:reporter];

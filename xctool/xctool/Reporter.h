@@ -60,8 +60,12 @@
 #define kReporter_EndTestSuite_TotalDurationKey @"totalDuration"
 
 #define kReporter_BeginTest_TestKey @"test"
+#define kReporter_BeginTest_ClassNameKey @"className"
+#define kReporter_BeginTest_MethodNameKey @"methodName"
 
 #define kReporter_EndTest_TestKey @"test"
+#define kReporter_EndTest_ClassNameKey @"className"
+#define kReporter_EndTest_MethodNameKey @"methodName"
 #define kReporter_EndTest_SucceededKey @"succeeded"
 #define kReporter_EndTest_TotalDurationKey @"totalDuration"
 #define kReporter_EndTest_OutputKey @"output"
@@ -102,6 +106,10 @@
 @class Action;
 @class Options;
 
+@protocol ExportedReporter
+@optional
++ (NSString *) reporterName;
+@end
 typedef enum {
   REPORTER_MESSAGE_DEBUG,
   REPORTER_MESSAGE_VERBOSE,
@@ -112,6 +120,7 @@ typedef enum {
 
 NSString *ReporterMessageLevelToString(ReporterMessageLevel level);
 
+
 void RegisterReporters(NSArray *reporters);
 void UnregisterReporters(NSArray *reporters);
 
@@ -121,7 +130,7 @@ void ReportMessage(ReporterMessageLevel level, NSString *format, ...) NS_FORMAT_
 {
   NSFileHandle *_outputHandle;
 }
-
++ (NSArray *) availableReporters;
 + (Reporter *)reporterWithName:(NSString *)name outputPath:(NSString *)outputPath options:(Options *)options;
 
 // The reporter will stream output to here.  Usually this will be "-" to route

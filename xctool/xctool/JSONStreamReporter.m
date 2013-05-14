@@ -18,6 +18,10 @@
 
 @implementation JSONStreamReporter
 
++ (NSString *) reporterName {
+    return @"json-stream";
+}
+
 - (void)passThrough:(NSDictionary *)event
 {
   NSError *error = nil;
@@ -32,6 +36,10 @@
   [self.outputHandle writeData:[@"\n" dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
+- (void)setReporterOptions: (NSDictionary *) data {
+    NSLog(@"%@", data);
+}
+
 - (void)beginAction:(NSDictionary *)event { [self passThrough:event]; }
 - (void)endAction:(NSDictionary *)event { [self passThrough:event]; }
 - (void)beginBuildTarget:(NSDictionary *)event { [self passThrough:event]; }
@@ -40,8 +48,8 @@
 - (void)endBuildCommand:(NSDictionary *)event { [self passThrough:event]; }
 - (void)beginXcodebuild:(NSDictionary *)event { [self passThrough:event]; }
 - (void)endXcodebuild:(NSDictionary *)event { [self passThrough:event]; }
-- (void)beginOctest:(NSDictionary *)event { [self passThrough:event]; }
-- (void)endOctest:(NSDictionary *)event { [self passThrough:event]; }
+- (void)beginOcunit:(NSDictionary *)event { [self passThrough:event]; }
+- (void)endOcunit:(NSDictionary *)event { [self passThrough:event]; }
 - (void)beginTestSuite:(NSDictionary *)event { [self passThrough:event]; }
 - (void)endTestSuite:(NSDictionary *)event { [self passThrough:event]; }
 - (void)beginTest:(NSDictionary *)event { [self passThrough:event]; }

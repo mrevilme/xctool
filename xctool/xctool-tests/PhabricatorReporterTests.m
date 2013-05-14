@@ -18,6 +18,7 @@
 
 #import "Options.h"
 #import "PhabricatorReporter.h"
+#import "Reporter+Testing.h"
 #import "TestUtil.h"
 
 @interface PhabricatorReporterTests : SenTestCase
@@ -25,38 +26,16 @@
 
 @implementation PhabricatorReporterTests
 
-- (PhabricatorReporter *)reporterPumpedWithEventsFrom:(NSString *)path options:(Options *)options
-{
-  PhabricatorReporter *reporter = (PhabricatorReporter *)[Reporter reporterWithName:@"phabricator"
-                                                                         outputPath:@"-"
-                                                                            options:options];
-  [reporter openWithStandardOutput:[NSFileHandle fileHandleWithNullDevice] error:nil];
-
-  NSString *pathContents = [NSString stringWithContentsOfFile:path
-                                                     encoding:NSUTF8StringEncoding
-                                                        error:nil];
-
-  for (NSString *line in [pathContents componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]]) {
-    if (line.length == 0) {
-      break;
-    }
-
-    [reporter handleEvent:[NSJSONSerialization JSONObjectWithData:[line dataUsingEncoding:NSUTF8StringEncoding]
-                                                          options:0
-                                                            error:nil]];
-  }
-
-  return reporter;
-}
-
 - (void)testGoodBuild
 {
-  Options *options = [[Options alloc] init];
+  Options *options = [[[Options alloc] init] autorelease];
   options.workspace = TEST_DATA @"TestProject-Library/TestProject-Library.xcodeproj";
   options.scheme = @"TestProject-Library";
-  PhabricatorReporter *reporter = [self reporterPumpedWithEventsFrom:TEST_DATA @"JSONStreamReporter-build-good.txt" options:options];
 
-  NSArray *results = [NSJSONSerialization JSONObjectWithData:[[reporter arcUnitJSON] dataUsingEncoding:NSUTF8StringEncoding]
+  NSData *outputData =
+    [PhabricatorReporter outputDataWithEventsFromFile:TEST_DATA @"JSONStreamReporter-build-good.txt"
+                                              options:options];
+  NSArray *results = [NSJSONSerialization JSONObjectWithData:outputData
                                                      options:0
                                                        error:nil];
   assertThat(results, notNilValue());
@@ -83,12 +62,14 @@
 
 - (void)testBadBuild
 {
-  Options *options = [[Options alloc] init];
+  Options *options = [[[Options alloc] init] autorelease];
   options.workspace = TEST_DATA @"TestProject-Library/TestProject-Library.xcodeproj";
   options.scheme = @"TestProject-Library";
-  PhabricatorReporter *reporter = [self reporterPumpedWithEventsFrom:TEST_DATA @"JSONStreamReporter-build-bad.txt" options:options];
 
-  NSArray *results = [NSJSONSerialization JSONObjectWithData:[[reporter arcUnitJSON] dataUsingEncoding:NSUTF8StringEncoding]
+  NSData *outputData =
+    [PhabricatorReporter outputDataWithEventsFromFile:TEST_DATA @"JSONStreamReporter-build-bad.txt"
+                                              options:options];
+  NSArray *results = [NSJSONSerialization JSONObjectWithData:outputData
                                                      options:0
                                                        error:nil];
   assertThat(results, notNilValue());
@@ -115,17 +96,54 @@
 
 - (void)testTestResults
 {
-  Options *options = [[Options alloc] init];
+  Options *options = [[[Options alloc] init] autorelease];
   options.workspace = TEST_DATA @"TestProject-Library/TestProject-Library.xcodeproj";
   options.scheme = @"TestProject-Library";
-  PhabricatorReporter *reporter = [self reporterPumpedWithEventsFrom:TEST_DATA @"JSONStreamReporter-runtests.txt" options:options];
 
-  NSArray *results = [NSJSONSerialization JSONObjectWithData:[[reporter arcUnitJSON] dataUsingEncoding:NSUTF8StringEncoding]
+  NSData *outputData =
+    [PhabricatorReporter outputDataWithEventsFromFile:TEST_DATA @"JSONStreamReporter-runtests.txt"
+                                              options:options];
+  NSArray *results = [NSJSONSerialization JSONObjectWithData:outputData
                                                      options:0
                                                        error:nil];
+
   assertThat(results, notNilValue());
   assertThat(results,
              equalTo(@[
+                     @{
+                     @"name" : @"TestProject-Library: -[OtherTests testSomething]",
+                     @"result" : @"pass",
+                     @"userdata" : @"",
+                     @"coverage" : [NSNull null],
+                     @"extra" :  [NSNull null],
+                     @"link" : [NSNull null],
+                     },
+                     @{
+                     @"name" : @"TestProject-Library: -[SomeTests testBacktraceOutputIsCaptured]",
+                     @"result" : @"pass",
+                     @"userdata" : @"0   TestProject-LibraryTests            0x016c9827 -[SomeTests testBacktraceOutputIsCaptured] + 103\n"
+                                   @"1   CoreFoundation                      0x00a011bd __invoking___ + 29\n"
+                                   @"2   CoreFoundation                      0x00a010d6 -[NSInvocation invoke] + 342\n"
+                                   @"3   SenTestingKit                       0x20103ed1 -[SenTestCase invokeTest] + 219\n"
+                                   @"4   SenTestingKit                       0x2010405b -[SenTestCase performTest:] + 183\n"
+                                   @"5   SenTestingKit                       0x201037bf -[SenTest run] + 82\n"
+                                   @"6   SenTestingKit                       0x2010792b -[SenTestSuite performTest:] + 139\n"
+                                   @"7   SenTestingKit                       0x201037bf -[SenTest run] + 82\n"
+                                   @"8   SenTestingKit                       0x2010792b -[SenTestSuite performTest:] + 139\n"
+                                   @"9   SenTestingKit                       0x201037bf -[SenTest run] + 82\n"
+                                   @"10  SenTestingKit                       0x2010792b -[SenTestSuite performTest:] + 139\n"
+                                   @"11  SenTestingKit                       0x201037bf -[SenTest run] + 82\n"
+                                   @"12  SenTestingKit                       0x201063ec +[SenTestProbe runTests:] + 174\n"
+                                   @"13  libobjc.A.dylib                     0x007385c8 +[NSObject performSelector:withObject:] + 70\n"
+                                   @"14  otest                               0x00002342 otest + 4930\n"
+                                   @"15  otest                               0x000025ef otest + 5615\n"
+                                   @"16  otest                               0x0000268c otest + 5772\n"
+                                   @"17  otest                               0x00002001 otest + 4097\n"
+                                   @"18  otest                               0x00001f71 otest + 3953\n",
+                     @"coverage" : [NSNull null],
+                     @"extra" :  [NSNull null],
+                     @"link" : [NSNull null],
+                     },
                      @{
                      @"name" : @"TestProject-Library: -[SomeTests testOutputMerging]",
                      @"result" : @"pass",
@@ -137,7 +155,7 @@
                      @{
                      @"name" : @"TestProject-Library: -[SomeTests testPrintSDK]",
                      @"result" : @"pass",
-                     @"userdata" : @"2013-03-28 11:35:43.956 otest[64678:707] SDK: 6.1\n",
+                     @"userdata" : @"2013-05-08 20:51:11.809 otest[88423:707] SDK: 6.1\n",
                      @"coverage" : [NSNull null],
                      @"extra" :  [NSNull null],
                      @"link" : [NSNull null],
@@ -145,7 +163,7 @@
                      @{
                      @"name" : @"TestProject-Library: -[SomeTests testStream]",
                      @"result" : @"pass",
-                     @"userdata" : @"2013-03-28 11:35:43.957 otest[64678:707] >>>> i = 0\n2013-03-28 11:35:44.208 otest[64678:707] >>>> i = 1\n2013-03-28 11:35:44.459 otest[64678:707] >>>> i = 2\n",
+                     @"userdata" : @"2013-05-08 20:51:11.809 otest[88423:707] >>>> i = 0\n2013-05-08 20:51:12.060 otest[88423:707] >>>> i = 1\n2013-05-08 20:51:12.312 otest[88423:707] >>>> i = 2\n",
                      @"coverage" : [NSNull null],
                      @"extra" :  [NSNull null],
                      @"link" : [NSNull null],
@@ -153,7 +171,7 @@
                      @{
                      @"name" : @"TestProject-Library: -[SomeTests testWillFail]",
                      @"result" : @"fail",
-                     @"userdata" : @"/Users/fpotter/fb/git/fbobjc/Tools/xctool/xctool/xctool-tests/TestData/TestProject-Library/TestProject-LibraryTests/SomeTests.m:40: SenTestFailureException: 'a' should be equal to 'b' Strings aren't equal",
+                     @"userdata" : @"/Users/fpotter/xctool/xctool/xctool-tests/TestData/TestProject-Library/TestProject-LibraryTests/SomeTests.m:40: SenTestFailureException: 'a' should be equal to 'b' Strings aren't equal",
                      @"coverage" : [NSNull null],
                      @"extra" :  [NSNull null],
                      @"link" : [NSNull null],
