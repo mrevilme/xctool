@@ -9,5 +9,6 @@
 #import "Reporter.h"
 
 @interface JSONReporter : Reporter<ExportedReporter>
-@property(nonatomic, strong) NSMutableArray *root;
+@property(nonatomic, strong) NSMutableArray *events;
+- (id) rootObject;
 @end
